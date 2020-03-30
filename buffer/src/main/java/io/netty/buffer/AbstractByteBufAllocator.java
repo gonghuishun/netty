@@ -25,8 +25,8 @@ import io.netty.util.internal.StringUtil;
  * Skeletal {@link ByteBufAllocator} implementation to extend.
  */
 public abstract class AbstractByteBufAllocator implements ByteBufAllocator {
-    static final int DEFAULT_INITIAL_CAPACITY = 256;
-    static final int DEFAULT_MAX_CAPACITY = Integer.MAX_VALUE;
+    static final int DEFAULT_INITIAL_CAPACITY = 256;//默认初始容量
+    static final int DEFAULT_MAX_CAPACITY = Integer.MAX_VALUE;//最大容量2GB
     static final int DEFAULT_MAX_COMPONENTS = 16;
     static final int CALCULATE_THRESHOLD = 1048576 * 4; // 4 MiB page
 
@@ -264,11 +264,14 @@ public abstract class AbstractByteBufAllocator implements ByteBufAllocator {
         }
 
         // If over threshold, do not double but just increase by threshold.
+        //超过4M  新容量最小要求/4 * 4 + 4
         if (minNewCapacity > threshold) {
             int newCapacity = minNewCapacity / threshold * threshold;
             if (newCapacity > maxCapacity - threshold) {
+                //超过上限  则为maxCapacity  2G
                 newCapacity = maxCapacity;
             } else {
+                // 新容量最小要求/4 * 4 + 4
                 newCapacity += threshold;
             }
             return newCapacity;

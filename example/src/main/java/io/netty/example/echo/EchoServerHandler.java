@@ -15,18 +15,28 @@
  */
 package io.netty.example.echo;
 
+import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
+import io.netty.util.internal.logging.InternalLogger;
+import io.netty.util.internal.logging.InternalLoggerFactory;
+
+import java.util.Arrays;
 
 /**
  * Handler implementation for the echo server.
  */
 @Sharable
 public class EchoServerHandler extends ChannelInboundHandlerAdapter {
+    final InternalLogger logger = InternalLoggerFactory.getInstance(getClass());
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
+        ByteBuf buf = (ByteBuf)msg;
+        byte [] bytes = new byte[buf.readableBytes()];
+        buf.getBytes(buf.readerIndex(),bytes);
+        logger.info(Arrays.toString(bytes));
         ctx.write(msg);
     }
 

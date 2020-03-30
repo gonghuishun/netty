@@ -19,6 +19,10 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
+import io.netty.util.internal.logging.InternalLogger;
+import io.netty.util.internal.logging.InternalLoggerFactory;
+
+import java.util.Arrays;
 
 /**
  * Handler implementation for the echo client.  It initiates the ping-pong
@@ -26,6 +30,9 @@ import io.netty.channel.ChannelInboundHandlerAdapter;
  * the server.
  */
 public class EchoClientHandler extends ChannelInboundHandlerAdapter {
+
+
+    final InternalLogger logger = InternalLoggerFactory.getInstance(getClass());
 
     private final ByteBuf firstMessage;
 
@@ -45,8 +52,12 @@ public class EchoClientHandler extends ChannelInboundHandlerAdapter {
     }
 
     @Override
-    public void channelRead(ChannelHandlerContext ctx, Object msg) {
-        ctx.write(msg);
+    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception{
+        ByteBuf buf = (ByteBuf)msg;
+        byte [] bytes = new byte[buf.readableBytes()];
+        buf.getBytes(buf.readerIndex(),bytes);
+        logger.info(Arrays.toString(bytes));
+        //ctx.write(msg);
     }
 
     @Override

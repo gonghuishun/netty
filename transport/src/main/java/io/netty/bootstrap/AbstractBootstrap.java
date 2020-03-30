@@ -314,6 +314,10 @@ public abstract class AbstractBootstrap<B extends AbstractBootstrap<B, C>, C ext
         }
     }
 
+    /**
+     * 初始化channel 和 register 到 selector
+     * @return
+     */
     final ChannelFuture initAndRegister() {
         Channel channel = null;
         try {

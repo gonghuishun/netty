@@ -279,6 +279,10 @@ public abstract class AbstractByteBuf extends ByteBuf {
         return this;
     }
 
+    /**
+     * 扩容操作
+     * @param minWritableBytes
+     */
     final void ensureWritable0(int minWritableBytes) {
         ensureAccessible();
         if (minWritableBytes <= writableBytes()) {
